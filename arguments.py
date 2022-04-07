@@ -49,6 +49,10 @@ class TrainingArguments:
         default=15000,
         metadata={"help": "Interval to save checkpoints. Measured as number of forward passes not training steps."},
     )
+    local_rank: Optional[int] = field(
+        default=0,
+        metadata={"help": "For deepspeed."},
+    )
 
 
 @dataclass
