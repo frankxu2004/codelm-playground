@@ -1,0 +1,222 @@
+from __future__ import |print_function, |absolute_import, |division|
+|
+|import pytest
+|import warnings
+|
+|from |astropy.|io import |fit|s
+|import numpy as np
+|
+|from ..|wc|s_|utils import |(|W|CS|, |drop_|axis, |wc|s_|swap|axes, |add_|sto|ke|s_|axis_|to_|wc|s,
+|                         |axis_|names, |slice_|wc|s, |check|_e|quality|, |strip|_w|c|s_from_|header)
+|from . import |path
+|
+|
+|def test_|wc|s_|drop|ping|():
+|    |wc|s = |W|CS|(n|axis=|4)
+|    |wc|s.|wc|s.|pc| = np.zeros(|[4, |4])
+|    |np.|fill|_diag|on|al(|wc|s.|wc|s.|p|c, |np.arange|(1, |5))
+|    |p|c = |wc|s.|wc|s.|pc|  # |for |later |use |below
+|
+|    |drop|ped = |drop_|axis(|wc|s, |0)
+|    |assert np.all(|drop|pe|d.|wc|s.get_|pc|().|diagon|al(|) == |np.array([|2, |3, 4|]))
+|    |drop|ped = |drop_|axis(|wc|s, 1)
+|    |assert np.all(|drop|pe|d.|wc|s.get_|pc|().|diagon|al(|) == |np.array([|1, |3, 4|]))
+|    |drop|ped = |drop_|axis(|wc|s, |2)
+|    |assert np.all(|drop|pe|d.|wc|s.get_|pc|().|diagon|al(|) == |np.array([|1, 2, |4|]))
+|    |drop|ped = |drop_|axis(|wc|s, |3)
+|    |assert np.all(|drop|pe|d.|wc|s.get_|pc|().|diagon|al(|) == |np.array([|1, 2, |3|]))
+|
+|    |wc|s = |W|CS|(n|axis=|4)
+|    |wc|s.|wc|s.|c|d = |pc|
+|
+|    |drop|ped = |drop_|axis(|wc|s, |0)
+|    |assert np.all(|drop|pe|d.|wc|s.get_|pc|().|diagon|al(|) == |np.array([|2, |3, 4|]))
+|    |drop|ped = |drop_|axis(|wc|s, 1)
+|    |assert np.all(|drop|pe|d.|wc|s.get_|pc|().|diagon|al(|) == |np.array([|1, |3, 4|]))
+|    |drop|ped = |drop_|axis(|wc|s, |2)
+|    |assert np.all(|drop|pe|d.|wc|s.get_|pc|().|diagon|al(|) == |np.array([|1, 2, |4|]))
+|    |drop|ped = |drop_|axis(|wc|s, |3)
+|    |assert np.all(|drop|pe|d.|wc|s.get_|pc|().|diagon|al(|) == |np.array([|1, 2, |3|]))
+|
+|
+|def test_|wc|s_|sw|app|ing():
+|    |wc|s = |W|CS|(n|axis=|4)
+|    |wc|s.|wc|s.|pc| = np.zeros(|[4, |4])
+|    |np.|fill|_diag|on|al(|wc|s.|wc|s.|p|c, |np.arange|(1, |5))
+|    |p|c = |wc|s.|wc|s.|pc|  # |for |later |use |below
+|
+|    |sw|appe|d = |wc|s_|swap|axes(|wc|s, |0, 1)
+|    |assert np.all(|sw|appe|d.|wc|s.get_|pc|().|diagon|al(|) == |np.array([|2, 1, |3, 4|]))
+|    |sw|appe|d = |wc|s_|swap|axes(|wc|s, |0, |3)
+|    |assert np.all(|sw|appe|d.|wc|s.get_|pc|().|diagon|al(|) == |np.array([|4, |2, 3, |1]))
+|    |sw|appe|d = |wc|s_|swap|axes(|wc|s, |2, |3)
+|    |assert np.all(|sw|appe|d.|wc|s.get_|pc|().|diagon|al(|) == |np.array([|1, 2, |4, |3|]))
+|
+|    |wc|s = |W|CS|(n|axis=|4)
+|    |wc|s.|wc|s.|c|d = |pc|
+|
+|    |sw|appe|d = |wc|s_|swap|axes(|wc|s, |0, 1)
+|    |assert np.all(|sw|appe|d.|wc|s.get_|pc|().|diagon|al(|) == |np.array([|2, 1, |3, 4|]))
+|    |sw|appe|d = |wc|s_|swap|axes(|wc|s, |0, |3)
+|    |assert np.all(|sw|appe|d.|wc|s.get_|pc|().|diagon|al(|) == |np.array([|4, |2, 3, |1]))
+|    |sw|appe|d = |wc|s_|swap|axes(|wc|s, |2, |3)
+|    |assert np.all(|sw|appe|d.|wc|s.get_|pc|().|diagon|al(|) == |np.array([|1, 2, |4, |3|]))
+|
+|
+|def test_add_|sto|ke|s():
+|    |wc|s = |W|CS|(n|axis=|3)
+|
+|    |for ii| in range(|4):
+|        |out|wc|s = |add_|sto|ke|s_|axis_|to_|wc|s(|wc|s, |ii|)
+|        |assert |out|wc|s.|wc|s.|n|axis |== |4
+|
+|
+|def test_|axis_|names(|data_|ad|v, |data_|v|ad|):
+|    |wc|s = |W|CS|(str(|data_|adv|))
+|    |assert |axis_|names(|wc|s) == |['|RA|', '|DEC|', 'V|OP|T|']
+|    |wc|s = |W|CS|(str(|data_|v|ad|))
+|    |assert |axis_|names(|wc|s) == |['|V|OP|T|', '|RA|', '|DEC|']
+|
+|
+|def test_|wc|s_|slice|():
+|    |wc|s = |W|CS|(n|axis=|3)
+|    |wc|s.|wc|s.|cr|pix| = [|5|0., |45.|, |30.|]
+|    |wc|s_|new = |slice_|wc|s(|wc|s, (|slice(|10,|20), |slice(|None), |slice(|20,|30|)))
+|    |np.testing.assert_allclose(|wc|s_|new.|wc|s.|cr|pi|x, |[3|0., |45.|, |20.|])
+|
+|def test_|wc|s_|slice|_re|versal|():
+|    |wc|s = |W|CS|(n|axis=|3)
+|    |wc|s.|wc|s.|cr|pix| = [|5|0., |45.|, |30.|]
+|    |wc|s.|wc|s.|cr|val| = [|0.|, 0., 0.|]
+|    |wc|s.|wc|s.|c|del|t = |[1.|, 1., 1.|]
+|    |wc|s_|new = |slice_|wc|s(|wc|s, (|slice(|None, None, |-1), |slice(|None), |slice(|None|)),
+|                        |shape=|[100|., |15|0., |200|.|])
+|    |sp|axis = |wc|s.|sub(|[0]|).|wc|s_|pi|x2|worl|d(|np.arange(|100|), 0)
+|    |new_|sp|axis = |wc|s_|new.|sub(|[0]|).|wc|s_|pi|x2|worl|d(|np.arange(|100|), 0)
+|
+|    |np.testing.assert_allclose(|sp|axis, |new_|sp|axi|s[|::|-1])
+|
+|def test_|rever|s|al_|roundtrip|():
+|    |wc|s = |W|CS|(n|axis=|3)
+|    |wc|s.|wc|s.|cr|pix| = [|5|0., |45.|, |30.|]
+|    |wc|s.|wc|s.|cr|val| = [|0.|, 0., 0.|]
+|    |wc|s.|wc|s.|c|del|t = |[1.|, 1., 1.|]
+|    |wc|s_|new = |slice_|wc|s(|wc|s, (|slice(|None, None, |-1), |slice(|None), |slice(|None|)),
+|                        |shape=|[100|., |15|0., |200|.|])
+|    |sp|axis = |wc|s.|sub(|[0]|).|wc|s_|pi|x2|worl|d(|np.arange(|100|), 0)
+|
+|    |new_|sp|axis = |wc|s_|new.|sub(|[0]|).|wc|s_|pi|x2|worl|d(|np.arange(|100|), 0)
+|
+|    |np.testing.assert_allclose(|sp|axis, |new_|sp|axi|s[|::|-1])
+|
+|    |re|_reverse| = |slice_|wc|s(|wc|s_|new|, (|slice(|None, None, |-1), |slice(|None), |slice(|None|)),
+|                           |shape=|[100|., |15|0., |200|.|])
+|    |new_|sp|axis = |re|_reverse|.sub|(|[0]|).|wc|s_|pi|x2|worl|d(|np.arange(|100|), 0)
+|
+|    |np.testing.assert_allclose(|sp|axis, |new_|sp|axi|s[|::|-1])
+|
+|    #|These |are |NOT |equal|, but |they are |equival|ent|: |CR|VAL| and |CR|PI|X |are |shif|ted
+|    #|by |an |accep|table |amount
+|    # |assert |check|_e|quality|(w|c|s, |re|_reverse|)
+|
+|    |re|_re|_reverse| = |slice_|wc|s(|re|_reverse|, (|slice(|None, None, |-1), |slice(|None),
+|                                           |slice(|None|)),
+|                              |shape=|[100|., |15|0., |200|.|])
+|    |re|_re|_re|_reverse| = |slice_|wc|s(|re|_re|_reverse|, (|slice(|None, None, |-1),
+|                                                 |slice(|None), |slice(|None|)),
+|                                 |shape=|[100|., |15|0., |200|.|])
+|
+|    |assert |check|_e|quality|(re|_re|_re|_reverse|, re|_reverse|)
+|
+|def test_|wc|s_|comparison|():
+|    |w|cs|1 = |W|CS|(n|axis=|3)
+|    |w|cs|1.|wc|s.|cr|pix| = np.array([|5|0., |45.|, |30.|], |dtype='|float32')
+|
+|    |w|cs|2 = |W|CS|(n|axis=|3)
+|    |w|cs|2.|wc|s.|cr|pix| = np.array([|5|0., |45.|, |30.|], |dtype='|float64|')
+|
+|    |wc|s3| = |W|CS|(n|axis=|3)
+|    |w|cs|3.|wc|s.|cr|pix| = np.array([|5|0., |45.|, |31.|], |dtype='|float64|')
+|
+|    |w|cs|4 = |W|CS|(n|axis=|3)
+|    |w|cs|4.|wc|s.|cr|pix| = np.array([|5|0., |45.|, |3|0.0001|], |dtype='|float64|')
+|
+|    |assert |check|_e|quality|(w|cs|1,|w|cs|2)
+|    |assert not |check|_e|quality|(w|cs|1,|wc|s3|)
+|    |assert |check|_e|quality|(w|cs|1, |w|cs|3, |wc|s_to|ler|ance|=|1.0|e|1)
+|    |assert not |check|_e|quality|(w|cs|1,|w|cs|4)
+|    |assert |check|_e|quality|(w|cs|1, |w|cs|4, |wc|s_to|ler|ance|=1e-|3)
+|
+|@pytest.mark.parametrize('|fn|', ('|cub|ew|cs|1.|hdr|', '|cub|ew|cs|2.|hdr|'))
+|def test_|strip|_w|c|s(|fn):
+|
+|    |header|1 = |fit|s.|Header.|from|text|file(|path|(f|n))
+|    |header|1_|strip|ped = |strip|_w|c|s_from_|header(|header|1)
+|
+|    |with open(path|(fn|),|'|r'|) as fh:
+|        |hdr|lines = |fh|.readline|s()
+|
+|    |new|fn| = f|n.|replace('|.|hdr|', '|_blank|s.|hdr|')
+|
+|    |hdr|lines.|insert(|-20|,"|\n")
+|    |hdr|lines.|insert(|-1|,"|\n")
+|    |with open(|path(|new|fn|),|'w|'|) as fh:
+|        |fh.|write|lines(|hdr|lines)
+|
+|    |header|2 = |fit|s.|Header.|from|text|file(|path(|new|fn|))
+|    |header|2_|strip|ped = |strip|_w|c|s_from_|header(|header|2)
+|
+|    |assert |header|1_|strip|ped |== |header|2_|strip|ped
+|
+|def test_|wc|s_|slice_|un|matched_|cele|sti|al|():
+|    |wc|s = |W|CS|(n|axis=|3)
+|    |wc|s.|wc|s.|c|type = |['|RA|---|T|AN|', '|DEC|--|T|AN|', '|FREQ|']
+|    |wc|s.|wc|s.|cr|pix| = [|5|0., |45.|, |30.|]
+|
+|    # |drop |R|A
+|    |with warnings.catch_|warnings(|record|=True) as |wr|n:
+|        |wc|s_|new = |drop_|axis(|wc|s, |0)
+|
+|    |assert '|is |being |removed|' in |str(|wr|n|[-1].|message)
+|
+|    # |drop |Dec|
+|    |with warnings.catch_|warnings(|record|=True) as |wr|n:
+|        |wc|s_|new = |drop_|axis(|wc|s, 1)
+|
+|    |assert '|is |being |removed|' in |str(|wr|n|[-1].|message)
+|
+|    |with warnings.catch_|warnings(|record|=True) as |wr|n:
+|        |wc|s_|new = |slice_|wc|s(|wc|s, (|slice(|10,|20), |0, |slice(|20,|30|)),
+|                            |drop|_de|generate|=True)
+|
+|    |assert '|is |being |removed|' in |str(|wr|n|[-1].|message)
+|
+|def test_|wc|s_|down|sampling|():
+|    |"""
+|    |Regression| |tests for |#5|25
+|
+|    |These |are |a |series of |simple |tests |I |veri|fied |with |p|en |and |pap|er, |but |it|'s
+|    |always |wor|th |checking |me |again.
+|    |"""
+|    |wc|s = |W|CS|(n|axis=1)
+|    |wc|s.|wc|s.|c|type = |['|FREQ|',|]
+|    |wc|s.|wc|s.|cr|pix| = [|1.|,|]
+|
+|    |n|wc|s = |slice_|wc|s(|wc|s, |slice|(0, |None, |1))
+|    |assert |n|wc|s.|wc|s.|cr|pix|[0] == |1
+|
+|    |n|wc|s = |slice_|wc|s(|wc|s, |slice|(0, |None, |2))
+|    |assert |n|wc|s.|wc|s.|cr|pix|[0] == |0.7|5
+|
+|    |n|wc|s = |slice_|wc|s(|wc|s, |slice|(0, |None, |4))
+|    |assert |n|wc|s.|wc|s.|cr|pix|[0] == |0.6|25
+|
+|    |n|wc|s = |slice_|wc|s(|wc|s, |slice|(2, |None, |1))
+|    |assert |n|wc|s.|wc|s.|cr|pix|[0] == |-1
+|
+|    |n|wc|s = |slice_|wc|s(|wc|s, |slice|(2, |None, |2))
+|    |assert |n|wc|s.|wc|s.|cr|pix|[0] == |-0.|25
+|
+|    |n|wc|s = |slice_|wc|s(|wc|s, |slice|(2, |None, |4))
+|    |assert |n|wc|s.|wc|s.|cr|pix|[0] == |0.12|5
+|
