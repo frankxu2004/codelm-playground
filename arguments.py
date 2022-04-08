@@ -31,7 +31,7 @@ class TrainingArguments:
     learning_rate: Optional[float] = field(default=5e-4, metadata={"help": "Learning rate fo training."})
     lr_scheduler_type: Optional[str] = field(default="cosine", metadata={"help": "Learning rate."})
     num_warmup_steps: Optional[int] = field(
-        default=750, metadata={"help": "Number of warmup steps in the learning rate schedule."}
+        default=2000, metadata={"help": "Number of warmup steps in the learning rate schedule."}
     )
     gradient_accumulation_steps: Optional[int] = field(
         default=1, metadata={"help": "Number of gradient accumulation steps."}
