@@ -161,16 +161,16 @@ samples_per_step = accelerator.state.num_processes * args.train_batch_size
 set_seed(args.seed)
 
 # Clone model repository
-if accelerator.is_main_process:
-    hf_repo = Repository(args.save_dir, clone_from=args.model_ckpt)
+# if accelerator.is_main_process:
+#     hf_repo = Repository(args.save_dir, clone_from=args.model_ckpt)
 
 # Logging
 logger, tb_writer, run_name = setup_logging(args)
 logger.info(accelerator.state)
 
 # Checkout new branch on repo
-if accelerator.is_main_process:
-    hf_repo.git_checkout(run_name, create_branch_ok=True)
+# if accelerator.is_main_process:
+#     hf_repo.git_checkout(run_name, create_branch_ok=True)
 
 # Load model and tokenizer
 model = AutoModelForCausalLM.from_pretrained(args.save_dir)
@@ -225,8 +225,8 @@ for step, batch in enumerate(train_dataloader, start=1):
         accelerator.wait_for_everyone()
         unwrapped_model = accelerator.unwrap_model(model)
         unwrapped_model.save_pretrained(args.save_dir, save_function=accelerator.save)
-        if accelerator.is_main_process:
-            hf_repo.push_to_hub(commit_message=f"step {step}")
+        # if accelerator.is_main_process:
+        #     hf_repo.push_to_hub(commit_message=f"step {step}")
         model.train()
     if completed_steps >= args.max_train_steps:
         break
@@ -238,5 +238,5 @@ log_metrics(step, {"loss/eval": eval_loss, "perplexity": perplexity})
 accelerator.wait_for_everyone()
 unwrapped_model = accelerator.unwrap_model(model)
 unwrapped_model.save_pretrained(args.save_dir, save_function=accelerator.save)
-if accelerator.is_main_process:
-    hf_repo.push_to_hub(commit_message="final model")
+# if accelerator.is_main_process:
+#     hf_repo.push_to_hub(commit_message="final model")

@@ -9,11 +9,11 @@ class TrainingArguments:
     """
 
     model_ckpt: Optional[str] = field(
-        default="frankxu/codelm-playground",
+        default="frankxu/gpt-neo-125M-code",
         metadata={"help": "Model name or path of model to be trained."},
     )
     save_dir: Optional[str] = field(
-        default="./codelm-playground",
+        default="./gpt-neo-125M-code",
         metadata={"help": "Save dir where model repo is cloned and models updates are saved to."},
     )
     dataset_name_train: Optional[str] = field(
@@ -31,7 +31,7 @@ class TrainingArguments:
     learning_rate: Optional[float] = field(default=5e-4, metadata={"help": "Learning rate fo training."})
     lr_scheduler_type: Optional[str] = field(default="cosine", metadata={"help": "Learning rate."})
     num_warmup_steps: Optional[int] = field(
-        default=2000, metadata={"help": "Number of warmup steps in the learning rate schedule."}
+        default=750, metadata={"help": "Number of warmup steps in the learning rate schedule."}
     )
     gradient_accumulation_steps: Optional[int] = field(
         default=1, metadata={"help": "Number of gradient accumulation steps."}
