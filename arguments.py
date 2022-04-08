@@ -9,7 +9,7 @@ class TrainingArguments:
     """
 
     model_ckpt: Optional[str] = field(
-        default="frankxu/gpt-neo-125M-code",
+        default="frankxu/codelm-playground",
         metadata={"help": "Model name or path of model to be trained."},
     )
     save_dir: Optional[str] = field(
