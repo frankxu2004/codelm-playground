@@ -224,7 +224,8 @@ for step, batch in enumerate(train_dataloader, start=1):
         # log_metrics(step, {"loss/eval": eval_loss, "perplexity": perplexity})
         accelerator.wait_for_everyone()
         unwrapped_model = accelerator.unwrap_model(model)
-        unwrapped_model.save_pretrained(args.save_dir, save_function=accelerator.save)
+        if accelerator.is_main_process:
+            unwrapped_model.save_pretrained(args.save_dir, save_function=accelerator.save)
         # if accelerator.is_main_process:
         #     hf_repo.push_to_hub(commit_message=f"step {step}")
         model.train()
@@ -237,6 +238,7 @@ eval_loss, perplexity = evaluate(args)
 log_metrics(step, {"loss/eval": eval_loss, "perplexity": perplexity})
 accelerator.wait_for_everyone()
 unwrapped_model = accelerator.unwrap_model(model)
-unwrapped_model.save_pretrained(args.save_dir, save_function=accelerator.save)
-# if accelerator.is_main_process:
+if accelerator.is_main_process:
+    unwrapped_model.save_pretrained(args.save_dir, save_function=accelerator.save)
+# 
 #     hf_repo.push_to_hub(commit_message="final model")
