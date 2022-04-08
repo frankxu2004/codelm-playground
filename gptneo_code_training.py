@@ -220,8 +220,8 @@ for step, batch in enumerate(train_dataloader, start=1):
         completed_steps += 1
     if step % args.save_checkpoint_steps == 0:
         logger.info("Evaluating and saving model checkpoint")
-        eval_loss, perplexity = evaluate(args)
-        log_metrics(step, {"loss/eval": eval_loss, "perplexity": perplexity})
+        # eval_loss, perplexity = evaluate(args)
+        # log_metrics(step, {"loss/eval": eval_loss, "perplexity": perplexity})
         accelerator.wait_for_everyone()
         unwrapped_model = accelerator.unwrap_model(model)
         unwrapped_model.save_pretrained(args.save_dir, save_function=accelerator.save)
