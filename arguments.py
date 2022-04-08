@@ -13,7 +13,7 @@ class TrainingArguments:
         metadata={"help": "Model name or path of model to be trained."},
     )
     save_dir: Optional[str] = field(
-        default="./",
+        default="./codelm-playground",
         metadata={"help": "Save dir where model repo is cloned and models updates are saved to."},
     )
     dataset_name_train: Optional[str] = field(
