@@ -4,6 +4,4 @@ from transformers import AutoModelForCausalLM
 model = AutoModelForCausalLM.from_pretrained('EleutherAI/gpt-neo-125M')
 
 # Save model to the hub
-model.save_pretrained('gpt-neo-125M-code')
-
-model.push_to_hub('gpt-neo-125M-code')
+model.save_pretrained('codelm-playground', push_to_hub=True)

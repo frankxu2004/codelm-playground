@@ -13,7 +13,7 @@ class TrainingArguments:
         metadata={"help": "Model name or path of model to be trained."},
     )
     save_dir: Optional[str] = field(
-        default="../gpt-neo-125M-code",
+        default="./",
         metadata={"help": "Save dir where model repo is cloned and models updates are saved to."},
     )
     dataset_name_train: Optional[str] = field(
@@ -51,7 +51,7 @@ class TrainingArguments:
     )
     local_rank: Optional[int] = field(
         default=0,
-        metadata={"help": "For deepspeed."},
+        metadata={"help": "For deepspeed, placeholder."},
     )
 
 
