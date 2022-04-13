@@ -81,12 +81,19 @@ class HumanEvalArguments:
     """
     Configuration for running evaluation on HumanEval dataset.
     """
-
+    tokenizer_ckpt: Optional[str] = field(
+        default="EleutherAI/gpt-neo-125M",
+        metadata={"help": "tokenizer name."},
+    )
     model_ckpt: Optional[str] = field(
-        default="lvwerra/codeparrot",
+        default="frankxu/gpt-neo-125M-code",
         metadata={"help": "Model name or path of model to be evaluated."},
     )
     num_workers: Optional[int] = field(default=None, metadata={"help": "Number of workers used for code evaluation."})
+    num_tasks: Optional[int] = field(
+        default=None,
+        metadata={"help": "The number of human-eval tasks to run. If not included all tasks are evaluated."},
+    )
     do_sample: Optional[bool] = field(
         default=True, metadata={"help": "Sample from the language model's output distribution."}
     )
@@ -96,7 +103,7 @@ class HumanEvalArguments:
     top_p: Optional[float] = field(default=0.95, metadata={"help": "Top-p parameter used for nucleus sampling."})
     batch_size: Optional[int] = field(default=10, metadata={"help": "Number of generations to run in parallel."})
     n_samples: Optional[int] = field(
-        default=200, metadata={"help": "Number of completions to generate for each sample."}
+        default=100, metadata={"help": "Number of completions to generate for each sample."}
     )
     seed: Optional[int] = field(default=1, metadata={"help": "Random seed used for evaluation."})
     output_file: Optional[str] = field(
@@ -104,6 +111,12 @@ class HumanEvalArguments:
     )
     HF_ALLOW_CODE_EVAL: Optional[str] = field(
         default="0", metadata={"help": "Allow `code_eval` to execute Python code on machine"}
+    )
+    device_int: Optional[int] = field(
+        default=-1,
+        metadata={
+            "help": "Determine which device to run the `text-generation` Pipeline on. -1 is CPU and any zero or positive number corresponds to which GPU device id to run on."
+        },
     )
 
 
