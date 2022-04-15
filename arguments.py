@@ -101,7 +101,7 @@ class HumanEvalArguments:
     max_new_tokens: Optional[int] = field(default=256, metadata={"help": "Maximum number of newly generated tokens."})
     top_k: Optional[int] = field(default=0, metadata={"help": "Top-k parameter used for generation."})
     top_p: Optional[float] = field(default=0.95, metadata={"help": "Top-p parameter used for nucleus sampling."})
-    batch_size: Optional[int] = field(default=10, metadata={"help": "Number of generations to run in parallel."})
+    batch_size: Optional[int] = field(default=100, metadata={"help": "Number of generations to run in parallel."})
     n_samples: Optional[int] = field(
         default=100, metadata={"help": "Number of completions to generate for each sample."}
     )
